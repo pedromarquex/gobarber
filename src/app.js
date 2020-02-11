@@ -1,5 +1,6 @@
 import express from 'express';
 import routes from './routes';
+import logs from './middlewares/logs';
 
 class App {
     constructor() {
@@ -10,7 +11,7 @@ class App {
 
     middlewares() {
         this.server.use(express.json());
-        // this.server.use(logs());
+        this.server.use(logs);
     }
 
     routes() {
