@@ -1,6 +1,6 @@
 import express from 'express';
 import routes from './routes';
-import logs from './middlewares/logs';
+import logs from './app/middlewares/logs';
 
 import './database';
 
