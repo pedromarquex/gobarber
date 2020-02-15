@@ -3,20 +3,20 @@ import routes from './routes';
 import logs from './middlewares/logs';
 
 class App {
-    constructor() {
-        this.server = express();
-        this.middlewares();
-        this.routes();
-    }
+  constructor() {
+    this.server = express();
+    this.middlewares();
+    this.routes();
+  }
 
-    middlewares() {
-        this.server.use(express.json());
-        this.server.use(logs);
-    }
+  middlewares() {
+    this.server.use(express.json());
+    this.server.use(logs);
+  }
 
-    routes() {
-        this.server.use(routes);
-    }
+  routes() {
+    this.server.use(routes);
+  }
 }
 
 export default new App().server;
