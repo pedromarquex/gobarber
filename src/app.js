@@ -2,6 +2,8 @@ import express from 'express';
 import routes from './routes';
 import logs from './middlewares/logs';
 
+import './database';
+
 class App {
   constructor() {
     this.server = express();
