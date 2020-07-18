@@ -8,5 +8,5 @@ export default {
   },
   default: {
     from: 'Equipe GoBarber <noreply@gobarber.com>',
-  }
-}
+  },
+};

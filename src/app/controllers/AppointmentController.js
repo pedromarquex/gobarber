@@ -15,7 +15,7 @@ class AppointmentController {
     const appointments = await Appointment.findAll({
       where: {
         user_id: req.userId,
-        canceled_at: null
+        canceled_at: null,
       },
       order: ['date'],
       limit: 20,
@@ -30,18 +30,17 @@ class AppointmentController {
             {
               model: File,
               as: 'avatar',
-              attributes: ['id', 'url', 'path']
-            }
-          ]
-        }
-      ]
-    })
+              attributes: ['id', 'url', 'path'],
+            },
+          ],
+        },
+      ],
+    });
 
     return res.json(appointments);
   }
 
   async store(req, res) {
-
     const schema = Yup.object().shape({
       provider_id: Yup.number().required(),
       date: Yup.date().required(),
@@ -57,10 +56,12 @@ class AppointmentController {
 
     const isProvider = await User.findOne({
       where: { id: provider_id, provider: true },
-    })
+    });
 
     if (!isProvider) {
-      return res.status(401).json({ error: 'You can only create appointments with providers' });
+      return res
+        .status(401)
+        .json({ error: 'You can only create appointments with providers' });
     }
 
     // check for past dates
@@ -77,19 +78,21 @@ class AppointmentController {
       where: {
         provider_id,
         canceled_at: null,
-        date: hourStart
+        date: hourStart,
       },
-    })
+    });
 
     if (checkAvailability) {
-      return res.status(400).json({ error: 'Appointment date is not available' });
+      return res
+        .status(400)
+        .json({ error: 'Appointment date is not available' });
     }
 
     const appointment = await Appointment.create({
       user_id: req.userId,
       provider_id,
-      date: hourStart
-    })
+      date: hourStart,
+    });
 
     // Notify appointment provider
 
@@ -97,13 +100,13 @@ class AppointmentController {
     const formattedDate = format(
       hourStart,
       "'dia' dd  'de' MMMM', às' H:mm'h'",
-      { locale: pt },
-    )
+      { locale: pt }
+    );
 
     await Notification.create({
       content: `Novo agendamento de ${user.name} para ${formattedDate}`,
       user: provider_id,
-    })
+    });
 
     return res.json(appointment);
   }
@@ -119,19 +122,23 @@ class AppointmentController {
         {
           model: User,
           as: 'user',
-          attributes: ['name']
+          attributes: ['name'],
         },
-      ]
+      ],
     });
 
     if (appointment.user_id !== req.userId) {
-      return res.status(401).json({ error: "You don't have permission to cancel this appointment" });
+      return res.status(401).json({
+        error: "You don't have permission to cancel this appointment",
+      });
     }
 
     const dateWithSub = subHours(appointment.date, 2);
 
     if (isBefore(dateWithSub, new Date())) {
-      return res.status(401).json({ error: 'You can only cancel appointments 2 hours in advance' });
+      return res
+        .status(401)
+        .json({ error: 'You can only cancel appointments 2 hours in advance' });
     }
 
     appointment.canceled_at = new Date();
@@ -145,13 +152,11 @@ class AppointmentController {
       context: {
         provider: appointment.provider.name,
         user: appointment.user.name,
-        date: format(
-          appointment.date,
-          "'dia' dd  'de' MMMM', às' H:mm'h'",
-          { locale: pt, },
-        )
-      }
-    })
+        date: format(appointment.date, "'dia' dd  'de' MMMM', às' H:mm'h'", {
+          locale: pt,
+        }),
+      },
+    });
 
     return res.json(appointment);
   }
