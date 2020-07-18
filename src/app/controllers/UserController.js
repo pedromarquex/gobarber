@@ -34,11 +34,13 @@ class UserController {
       name: Yup.string(),
       email: Yup.string().email(),
       oldPassword: Yup.string().min(6),
+      // passowrd só será obrigatório caso o oldPassord seja informado
       password: Yup.string()
         .min(6)
         .when('oldPassword', (oldPassword, field) =>
           oldPassword ? field.required() : field
         ),
+      // garante que a confirmação de senha seja identica à nova senha
       confirmPassword: Yup.string().when('password', (password, field) =>
         password ? field.required().oneOf([Yup.ref('password')]) : field
       ),
