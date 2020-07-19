@@ -10,3 +10,10 @@ export default {
     from: 'Equipe GoBarber <noreply@gobarber.com>',
   },
 };
+
+// Amazon SES
+// Mailgun
+// Sparkpost
+// Mandril (MailChimp)
+
+// Mailtrap em produção
