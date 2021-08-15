@@ -27,8 +27,8 @@ function Header() {
             </div>
             <img
               src={
-                profile.avatar.url ||
-                'https://api.adorable.io/avatars/50/gobarber@adorable.io.png'
+                profile.avatar?.url ||
+                `https://ui-avatars.com/api/?name=${profile.name}`
               }
               alt="Pedro Marques"
             />

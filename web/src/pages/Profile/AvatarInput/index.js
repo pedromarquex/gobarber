@@ -41,7 +41,7 @@ function AvatarInput() {
         <img
           src={
             preview ||
-            'https://api.adorable.io/avatars/200/gobarber@adorable.io.png'
+            'https://ui-avatars.com/api/?name=gobarber'
           }
           alt=""
         />
